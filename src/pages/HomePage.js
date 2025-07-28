@@ -102,6 +102,7 @@ function HomePage() {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
+                
               }}
             />
             {/* Overlay content */}
@@ -135,6 +136,7 @@ function HomePage() {
               >
                 {currentSlide.buttonText}
               </Button>
+              
             </Box>
 
             {/* Left Arrow */}
@@ -164,6 +166,18 @@ function HomePage() {
             >
               <ArrowForwardIosIcon />
             </IconButton>
+
+            <Box
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          height: "150px", // adjust as needed
+          background: "linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent)",
+          pointerEvents: "none", // allow clicks to pass through
+        }}
+      />
           </Box>
         </Grid>
 

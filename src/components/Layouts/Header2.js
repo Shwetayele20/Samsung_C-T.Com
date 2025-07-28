@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { AppBar, Box, Toolbar, Button, Collapse, MenuItem } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Button,
+  Collapse,
+  MenuItem,
+} from "@mui/material";
 import Container from "@mui/material/Container";
 import logo from "../../assets/images/eng_logo.svg";
 import SearchIcon from "@mui/icons-material/Search";
-import {Menu} from "@mui/material"
+import { Menu } from "@mui/material";
+import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
+import KeyboardArrowUpSharpIcon from "@mui/icons-material/KeyboardArrowUpSharp";
 // Menu's
 const menuItems = [
   { label: "About C&T", key: "about" },
@@ -27,10 +36,10 @@ const menuData = {
   newsroom: ["Press Releases", "Events", "Media Library"],
 };
 function Header2() {
-    
-  const [anchorEl, setAnchorEl] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const menuOpen = Boolean(anchorEl);
 
   const handleOpen = (menuName) => {
     setActiveMenu(menuName);
@@ -53,8 +62,8 @@ function Header2() {
     <>
       <Box
         sx={{
-          position: "relative", 
-          zIndex: 1100, 
+          position: "relative",
+          zIndex: 1100,
         }}
       >
         <AppBar
@@ -134,16 +143,18 @@ function Header2() {
                 ))}
               </Box>
 
-
-
               {/* Appbar Buttons */}
               <Box
                 sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   "& Button": {
                     textTransform: "none",
                     columnGap: 20,
                     color: "black",
-                    padding: "20px",
+                    padding: "5px",
+                    marginLeft: "20px",
                     "&:hover": {
                       background: "none",
                     },
@@ -151,16 +162,48 @@ function Header2() {
                 }}
               >
                 <Button>Contact us</Button>
-                
-                <Button onClick={handleMenuClick}>ENG</Button>
-                <Menu onClose={handleMenuClose} 
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}>
-                  <MenuItem onClick={handleMenuClose} selected >English</MenuItem>
-                  <MenuItem onClick={handleMenuClose}>Korean</MenuItem>
+
+                <Button onClick={handleMenuClick}>
+                  <Box
+                    sx={{ display: "flex", alignItems: "center", gap: "4px" }}
+                  >
+                    ENG
+                    {menuOpen ? (
+                      <KeyboardArrowUpSharpIcon sx={{ fontSize: "20px" }} />
+                    ) : (
+                      <KeyboardArrowDownSharpIcon sx={{ fontSize: "20px" }} />
+                    )}
+                  </Box>
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={menuOpen}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem>English</MenuItem>
+                  <MenuItem>Korean</MenuItem>
                 </Menu>
-                <SearchIcon sx={{ color: "black" }} />
               </Box>
+              <Button
+                variant="contained"
+                sx={{
+                  border:'1px solid #cccccc',
+                  boxShadow:'none',
+                  borderRadius: "50%",
+                  width: 48,
+                  height: 48,
+                  minWidth: 0,
+                  padding: 0,
+                  background: "#ffffff",
+                  color: "#3B499D",
+                  "&:hover": {
+                    background: "#3B499D",
+                    color: "white",
+                  },
+                }}
+              >
+                <SearchIcon fontSize="small" />
+              </Button>
             </Toolbar>
           </Container>
         </AppBar>

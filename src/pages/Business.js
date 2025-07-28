@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import React, { useState, useRef } from "react";
+import { Box, Typography, Button } from "@mui/material";
 import slide1 from "../assets/images/Home/slide1.mp4";
 import slide2 from "../assets/images/Home/slide2.mp4";
 import slide3 from "../assets/images/Home/slide3.mp4";
 import slide4 from "../assets/images/Home/slide4.mp4";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 const slides = [
   {
@@ -33,23 +35,43 @@ const slides = [
 ];
 
 function Business() {
-    const [hoveredIndex , setHoveredIndex] = useState(null);
-    const videoRef = useRef([]);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const videoRef = useRef([]);
+  const [pausedStates, setPausedStates] = useState(
+    Array(slides.length).fill(false)
+  );
 
-    const HandleMouseEnter=(index)=>{
-      setHoveredIndex(index);
+  const HandleMouseEnter = (index) => {
+    setHoveredIndex(index);
+    if (!pausedStates[index]) {
       videoRef.current[index]?.play();
     }
+  };
 
-    const HandleMouseLeave=(index)=>{
-      setHoveredIndex(null);
-      videoRef.current[index]?.pause();
-     }
+  const HandleMouseLeave = (index) => {
+    setHoveredIndex(null);
+    videoRef.current[index]?.pause();
+  };
+
+  const handlePauseClick = (index) => {
+    const updatedPaused = [...pausedStates];
+    updatedPaused[index] = !updatedPaused[index];
+    setPausedStates(updatedPaused);
+
+    const video = videoRef.current[index];
+    if (video) {
+      if (updatedPaused[index]) {
+        video.pause();
+      } else {
+        video.play();
+      }
+    }
+  };
 
   return (
     <>
       <Typography
-        sx={{ mt: 4, fontWeight: '900', textAlign: 'left' }}
+        sx={{ mt: 4, fontWeight: "900", textAlign: "left" }}
         variant="h3"
       >
         OUR BUSINESS
@@ -79,31 +101,45 @@ function Business() {
               cursor: "pointer",
             }}
           >
-              {/* Background Media */}
-              <Box
-                component="video"
-                src={slide.src}
-                ref={(el) => (videoRef.current[index] = el)}
-                loop
-                muted
-                playsInline
-                disablePictureInPicture
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+            {/* Background Media */}
+            <Box
+              component="video"
+              src={slide.src}
+              ref={(el) => (videoRef.current[index] = el)}
+              loop
+              muted
+              playsInline
+              disablePictureInPicture
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
 
-              {/* Overlay content */}
+            {/* Overlay content */}
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 40,
+                left: 40,
+                right: 40,
+                color: "white",
+                zIndex: 10,
+                display: "flex",
+                columnGap: 10,
+              }}
+            >
               <Box
                 sx={{
-                  position: "absolute",
-                  bottom: 40,
-                  left: 40,
-                  color: "white",
-                  zIndex: 10,
                   textAlign: "left",
+                  width: "80%",
+                  transform:
+                    hoveredIndex === index
+                      ? "translateY(0px)"
+                      : "translateY(40px)",
+                  transition: "all 0.6s ease",
+                  
                 }}
               >
                 <Typography variant="h4" fontWeight="bold" mb={1}>
@@ -118,16 +154,59 @@ function Business() {
                     textTransform: "none",
                     borderColor: "white",
                     color: "white",
+                    opacity: hoveredIndex === index ? 1 : 0,
+                    transform:
+                      hoveredIndex === index
+                        ? "translateY(0px)"
+                        : "translateY(20px)",
+                    transition: "all 0.5s ease",
                     "&:hover": {
-                      backgroundColor: "rgb(255,255,255)",
-                      color: "blue",
-                    },
+                    backgroundColor: "rgb(255,255,255)",
+                    color:'blue'
+                  },
                   }}
                 >
                   {slide.buttonText}
                 </Button>
               </Box>
+
+              {hoveredIndex === index && (
+                <Box
+                  onClick={() => handlePauseClick(index)}
+                  sx={{
+                    marginTop: "80px",
+                    background: "rgba(255, 255, 255, 0.6)",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "50px",
+                    width: "50px",
+                  }}
+                >
+                  {pausedStates[index] ? <PlayArrowIcon /> : <PauseIcon />}
+                </Box>
+              )}
             </Box>
+
+            <Box
+              onMouseEnter={HandleMouseEnter}
+              onMouseLeave={HandleMouseLeave}
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                height: "150px", // adjust as needed
+                background:
+                  hoveredIndex === index
+                    ? "linear-gradient(to top, rgba(0, 0, 0, 1), transparent)"
+                    : "transparent",
+                pointerEvents: "none", // allow clicks to pass through
+              }}
+            />
+          </Box>
         ))}
       </Box>
     </>
