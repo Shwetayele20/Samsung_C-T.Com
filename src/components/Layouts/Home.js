@@ -5,6 +5,9 @@ import Header from "./Header";
 import Header2 from "./Header2";
 import Business from "../../pages/Business";
 import ESGActivity from "../../pages/ESGActivity";
+import NewsRoom from "../../pages/NewsRoom";
+import GlobalNetwork from "../../pages/GlobalNetwork";
+import Investor from "../../pages/Investor";
 
 function Home() {
   return (
@@ -17,6 +20,9 @@ function Home() {
            <HomePage/>
            <Business/>
            <ESGActivity/>
+           <NewsRoom/>
+           <GlobalNetwork/>
+           <Investor/>
           </Box>
         </Container>
       </div>
